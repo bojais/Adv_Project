@@ -70,5 +70,10 @@ namespace CollegeBusinessObjects
             get { return dataTable; }
             set { dataTable = value; }
         }
+
+        protected virtual void GenerateList()
+        {
+
+        }
     }
 }
