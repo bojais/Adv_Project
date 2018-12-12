@@ -75,5 +75,21 @@ namespace CollegeBusinessObjects
         {
 
         }
+
+        /// <summary>
+        /// Get the max id in the database
+        /// </summary>
+        /// <returns>The max id</returns>
+        public int GetMaxID()
+        {
+            // Init the command
+            command.CommandText = $"SELECT max({idField}) FROM {table}";
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return (int)reader.GetValue(0);
+        }
     }
 }
