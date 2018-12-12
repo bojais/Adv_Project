@@ -16,8 +16,6 @@ namespace CollegeBusinessObjects
         protected override void GenerateList()
         {
             Course course = new Course();
-
-
         }
     }
 }
