@@ -10,7 +10,7 @@ namespace CollegeBusinessObjects
     {
         private string title;
         private string credits;
-        // Hello
+
         public Course()
         {
 
