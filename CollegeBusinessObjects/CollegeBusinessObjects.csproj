@@ -46,6 +46,7 @@
       <DependentUpon>CollegeDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Course.cs" />
+    <Compile Include="CourseList.cs" />
     <Compile Include="DataList.cs" />
     <Compile Include="DataListJoin.cs" />
     <Compile Include="Instructor.cs" />
