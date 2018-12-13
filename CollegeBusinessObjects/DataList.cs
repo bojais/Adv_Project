@@ -91,5 +91,50 @@ namespace CollegeBusinessObjects
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
         }
+
+        public void SetDataTableColumns(Item item)
+        {
+            DataTable.Clear();
+            DataTable.Columns.Clear();
+
+            Type type = item.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            foreach(PropertyInfo property in properties)
+            {
+                DataTable.Columns.Add(property.Name);
+            }
+        }
+
+        public void AddDataTableRow(Item item)
+        {
+            Type type = item.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            string[] values = new string[properties.Length];
+            int fieldCount = 0;
+
+            foreach(PropertyInfo property in properties)
+            {
+                values[fieldCount] = property.GetValue(item).ToString();
+                fieldCount++;
+            }
+
+            DataTable.Rows.Add(values);
+        }
+
+        public void SetValues(Item item)
+        {
+            Type type = item.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            int fieldCount = 0;
+
+            foreach(PropertyInfo property in properties)
+            {
+                property.SetValue(item, reader.GetValue(fieldCount).ToString());
+                fieldCount++;
+            }
+        }
     }
 }
