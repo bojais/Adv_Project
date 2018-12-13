@@ -8,14 +8,6 @@ namespace CollegeBusinessObjects
 {
     public class CourseList: DataList
     {
-        public CourseList(): base("Courses", "CourseID")
-        {
-
-        }
-
-        protected override void GenerateList()
-        {
-            Course course = new Course();
-        }
+        //public CourseList(): base("Courses")
     }
 }
