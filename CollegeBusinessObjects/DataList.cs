@@ -185,7 +185,7 @@ namespace CollegeBusinessObjects
         }
 
         /// <summary>
-        /// Calculate the total of a cloumn where another column is equal to a value
+        /// Calculate the total of a cloumn where another column is equal to a value from another table
         /// </summary>
         /// <param name="sumColumn">Column to sum</param>
         /// <param name="column">Column to compare</param>
@@ -223,7 +223,7 @@ namespace CollegeBusinessObjects
         /// <param name="tableThree">The third table to compare column with</param>
         /// <param name="key">The common key between the three tables</param>
         /// <returns>the sum</returns>
-        public int TotalValue(string sumColumn, string column, string value, string tableTwo, string tableThree, string key)
+        public int TotalValue(string sumColumn, string column, string value, string tableTwo, string tableThree, string keyOne, string keyTwo)
         {
             // Clear all the prevously set parameters
             command.Parameters.Clear();
@@ -231,7 +231,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{key} = tt.{key} AND t.{key} = ttt.{key}";
+            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
@@ -299,7 +299,7 @@ namespace CollegeBusinessObjects
         /// <param name="tableTwo">The second table to compare column with</param>
         /// <param name="key">The common key between the two tables</param>
         /// <returns>the sum</returns>
-        public double AverageValue(string avgColumn, string column, string value, string tableTwo, string key)
+        public double AverageValue(string avgColumn, string column, string value, string tableTwo, string tableThree, string keyOne, string keyTwo)
         {
             // Clear all the prevously set parameters
             command.Parameters.Clear();
@@ -307,7 +307,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT avg({avgColumn}) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
+            command.CommandText = $"SELECT avg({avgColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
@@ -350,7 +350,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@valueThree", valueThree);
 
             // Init the command
-            command.CommandText = $"SELECT t.{columnOne}, t.{columnTwo} FROM {table} t, {tableTwo} tt WHERE t.{columnOne} = @valueOne AND t.{columnTwo} = @valueTwo AND t.{keyOne} = tt.{keyOne} AND tt.{columnThree} = @valueThree";
+            command.CommandText = $"SELECT t.{columnOne}, t.{columnTwo} FROM {table} t, {tableTwo} tt WHERE t.{columnOne} = @valueOne AND t.{columnTwo} = @valueTwo AND tt.{columnThree} = @valueThree AND t.{keyOne} = tt.{keyOne}";
 
             // Execute the command
             reader = command.ExecuteReader();
