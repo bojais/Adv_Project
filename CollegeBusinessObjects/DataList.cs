@@ -137,7 +137,11 @@ namespace CollegeBusinessObjects
             }
         }
 
-
+        /// <summary>
+        /// Calculate the total of a cloumn
+        /// </summary>
+        /// <param name="column">The column to sum</param>
+        /// <returns>the sum</returns>
         public int TotalValue(string column)
         {
             // Init the command
@@ -150,6 +154,13 @@ namespace CollegeBusinessObjects
             return (int)reader.GetValue(0);
         }
 
+        /// <summary>
+        /// Calculate the total of a cloumn where another column is equal to a value
+        /// </summary>
+        /// <param name="sumColumn">Column to sum</param>
+        /// <param name="column">Column to compare</param>
+        /// <param name="value">The value to compare with</param>
+        /// <returns>the sum</returns>
         public int TotalValue(string sumColumn, string column, string value)
         {
             // Clear all the prevously set parameters
@@ -167,6 +178,15 @@ namespace CollegeBusinessObjects
             return (int)reader.GetValue(0);
         }
 
+        /// <summary>
+        /// Calculate the total of a cloumn where another column is equal to a value
+        /// </summary>
+        /// <param name="sumColumn">Column to sum</param>
+        /// <param name="column">Column to compare</param>
+        /// <param name="value">The value to compare with</param>
+        /// <param name="tableTwo">The second table to compare column with</param>
+        /// <param name="key">The common key between the two tables</param>
+        /// <returns>the sum</returns>
         public int TotalValue(string sumColumn, string column, string value, string tableTwo, string key)
         {
             // Clear all the prevously set parameters
@@ -185,6 +205,16 @@ namespace CollegeBusinessObjects
             return (int)reader.GetValue(0);
         }
 
+        /// <summary>
+        /// Calculate the total of a cloumn where another column is equal to a value
+        /// </summary>
+        /// <param name="sumColumn">Column to sum</param>
+        /// <param name="column">Column to compare</param>
+        /// <param name="value">The value to compare with</param>
+        /// <param name="tableTwo">The second table to compare column with</param>
+        /// <param name="tableThree">The third table to compare column with</param>
+        /// <param name="key">The common key between the three tables</param>
+        /// <returns>the sum</returns>
         public int TotalValue(string sumColumn, string column, string value, string tableTwo, string tableThree, string key)
         {
             // Clear all the prevously set parameters
@@ -196,6 +226,23 @@ namespace CollegeBusinessObjects
             // Init the command
             command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{key} = tt.{key} AND t.{key} = ttt.{key}";
             // SELECT sum(duration) from Schedule sc, Section se, SectionStudent ss WHERE ss.StudentID = VALUE AND ss.SectionID = se.SectionID AND ss.SectionID = s.SectionID
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return (int)reader.GetValue(0);
+        }
+
+        /// <summary>
+        /// Calculate the average of a cloumn
+        /// </summary>
+        /// <param name="column">The column to calculate</param>
+        /// <returns>The average</returns>
+        public int AverageValue(string column)
+        {
+            // Init the command
+            command.CommandText = $"SELECT avg({column}) FROM {table}";
+
             // Execute the command
             reader = command.ExecuteReader();
 
