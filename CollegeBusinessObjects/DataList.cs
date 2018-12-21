@@ -150,6 +150,9 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
+            // Read the next row
+            reader.Read();
+
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
         }
@@ -174,6 +177,9 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
+            // Read the next row
+            reader.Read();
+
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
         }
@@ -193,13 +199,15 @@ namespace CollegeBusinessObjects
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
-            //command.Parameters.AddWithValue("@key", key);
 
             // Init the command
             command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
 
             // Execute the command
             reader = command.ExecuteReader();
+
+            // Read the next row
+            reader.Read();
 
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
@@ -221,13 +229,15 @@ namespace CollegeBusinessObjects
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
-            //command.Parameters.AddWithValue("@key", key);
 
             // Init the command
             command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{key} = tt.{key} AND t.{key} = ttt.{key}";
-            // SELECT sum(duration) from Schedule sc, Section se, SectionStudent ss WHERE ss.StudentID = VALUE AND ss.SectionID = se.SectionID AND ss.SectionID = s.SectionID
+
             // Execute the command
             reader = command.ExecuteReader();
+
+            // Read the next row
+            reader.Read();
 
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
@@ -238,7 +248,7 @@ namespace CollegeBusinessObjects
         /// </summary>
         /// <param name="column">The column to calculate</param>
         /// <returns>The average</returns>
-        public int AverageValue(string column)
+        public double AverageValue(string column)
         {
             // Init the command
             command.CommandText = $"SELECT avg({column}) FROM {table}";
@@ -246,8 +256,11 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
+            // Read the next row
+            reader.Read();
+
             // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            return (double)reader.GetValue(0);
         }
 
         /// <summary>
@@ -257,7 +270,7 @@ namespace CollegeBusinessObjects
         /// <param name="column">Column to compare</param>
         /// <param name="value">The value to compare with</param>
         /// <returns>the sum</returns>
-        public int AverageValue(string avgColumn, string column, string value)
+        public double AverageValue(string avgColumn, string column, string value)
         {
             // Clear all the prevously set parameters
             command.Parameters.Clear();
@@ -270,8 +283,11 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
+            // Read the next row
+            reader.Read();
+
             // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            return (double)reader.GetValue(0);
         }
 
         /// <summary>
@@ -283,13 +299,12 @@ namespace CollegeBusinessObjects
         /// <param name="tableTwo">The second table to compare column with</param>
         /// <param name="key">The common key between the two tables</param>
         /// <returns>the sum</returns>
-        public int AverageValue(string avgColumn, string column, string value, string tableTwo, string key)
+        public double AverageValue(string avgColumn, string column, string value, string tableTwo, string key)
         {
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
-            //command.Parameters.AddWithValue("@key", key);
 
             // Init the command
             command.CommandText = $"SELECT avg({avgColumn}) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
@@ -297,8 +312,51 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
+            // Read the next row
+            reader.Read();
+
             // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            return (double)reader.GetValue(0);
         }
-    }
+
+        // TODO: Add comments
+        public bool Exists(string columnOne, string valueOne, string columnTwo, string valueTwo, string columnThree, string valueThree)
+        {
+            // Clear all the prevously set parameters
+            command.Parameters.Clear();
+            // Set the new parameters
+            command.Parameters.AddWithValue("@valueOne", valueOne);
+            command.Parameters.AddWithValue("@valueTwo", valueTwo);
+            command.Parameters.AddWithValue("@valueThree", valueThree);
+
+            // Init the command
+            command.CommandText = $"SELECT {columnOne}, {columnTwo} FROM {table} WHERE {columnOne} = @valueOne AND {columnTwo} = @valueTwo AND  {columnThree} = @valueThree";
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return reader.Read();
+        }
+
+        // TODO: Add comments
+        public bool Exists(string tableTwo, string columnOne, string valueOne, string columnTwo, string valueTwo, string columnThree, string valueThree, string keyOne)
+        {
+            // Clear all the prevously set parameters
+            command.Parameters.Clear();
+            // Set the new parameters
+            command.Parameters.AddWithValue("@valueOne", valueOne);
+            command.Parameters.AddWithValue("@valueTwo", valueTwo);
+            command.Parameters.AddWithValue("@valueThree", valueThree);
+
+            // Init the command
+            command.CommandText = $"SELECT t.{columnOne}, t.{columnTwo} FROM {table} t, {tableTwo} tt WHERE t.{columnOne} = @valueOne AND t.{columnTwo} = @valueTwo AND t.{keyOne} = tt.{keyOne} AND tt.{columnThree} = @valueThree";
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return reader.Read();
+        }
+    } 
 }
