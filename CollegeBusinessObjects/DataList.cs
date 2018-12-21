@@ -176,7 +176,7 @@ namespace CollegeBusinessObjects
             //command.Parameters.AddWithValue("@key", key);
 
             // Init the command
-            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt  WHERE t.{key} = tt.{key} AND {column} = @value";
+            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
             // SELECT sum(duration) from Schedule sc, Section se WHERE sc.SectionID = se.SectionID AND se.InstructorID = VALUE
 
             // Execute the command
@@ -196,8 +196,7 @@ namespace CollegeBusinessObjects
 
             // Init the command
             command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt  WHERE t.{key} = tt.{key} AND {column} = @value";
-            // SELECT sum(duration) from Schedule sc, Section se WHERE sc.SectionID = se.SectionID AND se.InstructorID = VALUE
-
+            // SELECT sum(duration) from Schedule sc, Section se, SectionStudent ss WHERE ss.StudentID = VALUE AND ss.SectionID = se.SectionID AND ss.SectionID = s.SectionID
             // Execute the command
             reader = command.ExecuteReader();
 
