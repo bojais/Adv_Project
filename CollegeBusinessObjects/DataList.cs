@@ -249,5 +249,56 @@ namespace CollegeBusinessObjects
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
         }
+
+        /// <summary>
+        /// Calculate the average of a cloumn where another column is equal to a value
+        /// </summary>
+        /// <param name="avgColumn">Column to calculate</param>
+        /// <param name="column">Column to compare</param>
+        /// <param name="value">The value to compare with</param>
+        /// <returns>the sum</returns>
+        public int AverageValue(string avgColumn, string column, string value)
+        {
+            // Clear all the prevously set parameters
+            command.Parameters.Clear();
+            // Set the new parameters
+            command.Parameters.AddWithValue("@value", value);
+
+            // Init the command
+            command.CommandText = $"SELECT avg({avgColumn}) FROM {table} WHERE {column} = @value";
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return (int)reader.GetValue(0);
+        }
+
+        /// <summary>
+        /// Calculate the average of a cloumn where another column is equal to a value
+        /// </summary>
+        /// <param name="avgColumn">Column to calculate</param>
+        /// <param name="column">Column to compare</param>
+        /// <param name="value">The value to compare with</param>
+        /// <param name="tableTwo">The second table to compare column with</param>
+        /// <param name="key">The common key between the two tables</param>
+        /// <returns>the sum</returns>
+        public int AverageValue(string avgColumn, string column, string value, string tableTwo, string key)
+        {
+            // Clear all the prevously set parameters
+            command.Parameters.Clear();
+            // Set the new parameters
+            command.Parameters.AddWithValue("@value", value);
+            //command.Parameters.AddWithValue("@key", key);
+
+            // Init the command
+            command.CommandText = $"SELECT avg({avgColumn}) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return (int)reader.GetValue(0);
+        }
     }
 }
