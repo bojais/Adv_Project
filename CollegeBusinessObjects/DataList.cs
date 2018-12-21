@@ -185,5 +185,24 @@ namespace CollegeBusinessObjects
             // Get the value from the reader and cast it to an int
             return (int)reader.GetValue(0);
         }
+
+        public int TotalValue(string sumColumn, string column, string value, string tableTwo, string key, string key2)
+        {
+            // Clear all the prevously set parameters
+            command.Parameters.Clear();
+            // Set the new parameters
+            command.Parameters.AddWithValue("@value", value);
+            //command.Parameters.AddWithValue("@key", key);
+
+            // Init the command
+            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt  WHERE t.{key} = tt.{key} AND {column} = @value";
+            // SELECT sum(duration) from Schedule sc, Section se WHERE sc.SectionID = se.SectionID AND se.InstructorID = VALUE
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Get the value from the reader and cast it to an int
+            return (int)reader.GetValue(0);
+        }
     }
 }
