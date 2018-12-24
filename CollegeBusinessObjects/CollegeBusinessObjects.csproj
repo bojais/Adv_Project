@@ -66,6 +66,7 @@
     <Compile Include="Section.cs" />
     <Compile Include="SectionList.cs" />
     <Compile Include="SectionStudent.cs" />
+    <Compile Include="SectionStudentList.cs" />
     <Compile Include="Student.cs" />
     <Compile Include="StudentList.cs" />
     <Compile Include="ToughtCourse.cs" />

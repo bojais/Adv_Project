@@ -358,5 +358,64 @@ namespace CollegeBusinessObjects
             // Get the value from the reader and cast it to an int
             return reader.Read();
         }
-    } 
+
+        public void Delete(Item item)
+        {
+            // Opening the connection
+            connection.Open();
+
+            // Clear all the previously set parameters
+            command.Parameters.Clear();
+
+            // Set the new Parameters
+            command.Parameters.AddWithValue("@id", item.getID());
+
+            // Init the command
+            command.CommandText = "DELETE FROM " + table + "WHERE " + idField + " = @id";
+
+            // Execute the command
+            command.ExecuteNonQuery();
+        }
+
+
+        public void Delete(string column, string value)
+        {
+            // Opening the connection
+            connection.Open();
+
+            // Clear all the previously set parameters
+            command.Parameters.Clear();
+
+            // Set the new Parameters
+            command.Parameters.AddWithValue("@value", value);
+
+            // Init the command
+            command.CommandText = "DELETE FROM " + table + " WHERE " + column + " = @value";
+
+            // Execute the command
+            command.ExecuteNonQuery();
+        }
+
+
+        public void Delete(string table2, string key1, string key2, string column, string value)
+        {
+            // Opening the connection
+            connection.Open();
+
+            // Clear all the previously set parameters
+            command.Parameters.Clear();
+
+            // Set the new Parameters
+            command.Parameters.AddWithValue("@value", value);
+
+            // Init the command
+            command.CommandText = "DELETE t1 FROM " + table + " t1 INNER JOIN " + table2 + " t2 on t1." + table + " = t2." + table2
+                 + " AND t1." + table + " = @value";
+
+            // Execute the command
+            command.ExecuteNonQuery();
+
+
+        }
+    }
 }
