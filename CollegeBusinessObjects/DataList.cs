@@ -371,7 +371,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@id", item.getID());
 
             // Init the command
-            command.CommandText = "DELETE FROM " + table + "WHERE " + idField + " = @id";
+            command.CommandText = $"DELETE FROM {table} WHERE {idField} = @id";
 
             // Execute the command
             command.ExecuteNonQuery();
@@ -390,7 +390,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = "DELETE FROM " + table + " WHERE " + column + " = @value";
+            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
 
             // Execute the command
             command.ExecuteNonQuery();
@@ -409,13 +409,46 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = "DELETE t1 FROM " + table + " t1 INNER JOIN " + table2 + " t2 on t1." + table + " = t2." + table2
-                 + " AND t1." + table + " = @value";
+            command.CommandText = $"DELETE t1 FROM  {table} t1 INNER JOIN {table2} t2 on t1.{table} = t2.{table2} AND t1.{table} = @value";
+
+            // Execute the command
+            command.ExecuteNonQuery();
+        }
+
+
+
+
+        // With extra (table3) parameter and no keys parameter
+        // This can delete a record in Section table with all it's related records in tables Schedule and Section Student
+        public void Delete(string table2, string table3, string column, string value)
+        {
+            // Opening the connection
+            connection.Open();
+
+            // Clear all the previously set parameters
+            command.Parameters.Clear();
+
+            // Set the new Parameters
+            command.Parameters.AddWithValue("@value", value);
+
+            // Init the command
+            //command.CommandText = "DELETE t2 FROM " + table2 + " AS t2 INNER JOIN " + table + " AS t1 on t2. " + column + " = t1." + column + " AND t1." + column + " = @value";
+            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{column} = t1.{column} AND t1.{column} = @value";
 
             // Execute the command
             command.ExecuteNonQuery();
 
+            // Init the command
+            //command.CommandText = "DELETE t3 FROM " + table3 + " AS t3 INNER JOIN " + table + " AS t1 on t3. " + column + " = t1." + column + " AND t1." + column + " = @value";
+            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table} AS t1 on t3.{column} = t1.{column} AND t1.{column} = @value";
+            // Execute the command
+            command.ExecuteNonQuery();
 
+            // Init the command
+            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
+
+            // Execute the command
+            command.ExecuteNonQuery();
         }
     }
 }
