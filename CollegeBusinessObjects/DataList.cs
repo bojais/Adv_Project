@@ -359,6 +359,11 @@ namespace CollegeBusinessObjects
             return reader.Read();
         }
 
+
+
+
+
+        // A simple delete method that deletes a record in a table using the ID
         public void Delete(Item item)
         {
             // Opening the connection
@@ -378,9 +383,13 @@ namespace CollegeBusinessObjects
         }
 
 
+
+
+
+
         public void Delete(string column, string value)
         {
-            // Opening the connection
+            // Opening the connection`
             connection.Open();
 
             // Clear all the previously set parameters
@@ -397,7 +406,49 @@ namespace CollegeBusinessObjects
         }
 
 
-        public void Delete(string table2, string key1, string key2, string column, string value)
+
+
+
+
+        // With extra (table3 and table4) parameters and no keys parameter
+        // This can delete a record in Section table with all it's related records in the tables Schedule and SectionStudent
+        //public void Delete(string table2, string table3, string table4, string column, string value)
+        //{
+        //    // Opening the connection
+        //    connection.Open();
+
+        //    // Clear all the previously set parameters
+        //    command.Parameters.Clear();
+
+        //    // Set the new Parameters
+        //    command.Parameters.AddWithValue("@value", value);
+
+        //    // Delete related records from the first grand child table
+        //    command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{column} = t2.{column} AND t2.{column} = @value";
+
+        //    // Execute the command
+        //    command.ExecuteNonQuery();
+
+        //    // Delete related records from the second grand child table
+        //    command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{column} = t2.{column} AND t2.{column} = @value";
+
+        //    // Execute the command
+        //    command.ExecuteNonQuery();
+
+        //    // Delete related records from the child table
+        //    command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{column} = t1.{column} AND t1.{column} = @value";
+
+        //    // Delete some record from the parent table
+        //    command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
+
+        //    // Execute the command
+        //    command.ExecuteNonQuery();
+        //}
+
+
+        
+        //
+        public void Delete(string table2, string table3, string table4, string key1, string key2, string value, string value2)
         {
             // Opening the connection
             connection.Open();
@@ -407,46 +458,29 @@ namespace CollegeBusinessObjects
 
             // Set the new Parameters
             command.Parameters.AddWithValue("@value", value);
-
-            // Init the command
-            command.CommandText = $"DELETE t1 FROM  {table} t1 INNER JOIN {table2} t2 on t1.{table} = t2.{table2} AND t1.{table} = @value";
-
-            // Execute the command
-            command.ExecuteNonQuery();
-        }
+            command.Parameters.AddWithValue("@value2", value2);
 
 
-
-
-        // With extra (table3) parameter and no keys parameter
-        // This can delete a record in Section table with all it's related records in tables Schedule and Section Student
-        public void Delete(string table2, string table3, string column, string value)
-        {
-            // Opening the connection
-            connection.Open();
-
-            // Clear all the previously set parameters
-            command.Parameters.Clear();
-
-            // Set the new Parameters
-            command.Parameters.AddWithValue("@value", value);
-
-            // Init the command
-            //command.CommandText = "DELETE t2 FROM " + table2 + " AS t2 INNER JOIN " + table + " AS t1 on t2. " + column + " = t1." + column + " AND t1." + column + " = @value";
-            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{column} = t1.{column} AND t1.{column} = @value";
-
+            // Delete related records from the first grand child table
+            command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{key2} = t2.{key2} AND t2.{key2} = @value2";
             // Execute the command
             command.ExecuteNonQuery();
 
-            // Init the command
-            //command.CommandText = "DELETE t3 FROM " + table3 + " AS t3 INNER JOIN " + table + " AS t1 on t3. " + column + " = t1." + column + " AND t1." + column + " = @value";
-            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table} AS t1 on t3.{column} = t1.{column} AND t1.{column} = @value";
+
+            // Delete related records from the second grand child table
+            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{key2} = t2.{key2} AND t2.{key2} = @value2";
             // Execute the command
             command.ExecuteNonQuery();
 
-            // Init the command
-            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
 
+            // Delete related records from the child table
+            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{key1} = t1.{key1} AND t1.{key1} = @value";
+            // Execute the command
+            command.ExecuteNonQuery();
+
+
+            // Delete some record from the parent table
+            command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value";
             // Execute the command
             command.ExecuteNonQuery();
         }
