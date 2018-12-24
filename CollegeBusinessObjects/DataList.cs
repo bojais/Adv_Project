@@ -71,6 +71,28 @@ namespace CollegeBusinessObjects
             set { dataTable = value; }
         }
 
+        public virtual void Populate()
+        {
+            Connection.Open();
+            Command.Connection = Connection;
+            Command.CommandText = $"SELECT * FROM {this.Table}";
+            Reader = Command.ExecuteReader();
+            GenerateList();
+        }
+
+        public void Populate(Item item)
+        {
+            Connection.Open();
+            Command.Connection = Connection;
+            Command.CommandText = $"SELECT * FROM {this.Table} WHERE {this.IdField} = '{item.getID()}'";
+            Reader = Command.ExecuteReader();
+            Reader.Read();
+            SetValues(item);
+
+            Reader.Close();
+            Connection.Close();
+        }
+
         protected virtual void GenerateList()
         {
 
