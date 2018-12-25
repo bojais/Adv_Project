@@ -82,11 +82,12 @@ namespace CollegeBusinessObjects
         public void Populate(Item item)
         {
             Connection.Open();
-            Command.CommandText = $"SELECT * FROM {this.Table} WHERE {this.IdField} = '{item.getID()}'";
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@id", item.getID());
+            Command.CommandText = $"SELECT * FROM {this.Table} WHERE {this.IdField} = @id";
             Reader = Command.ExecuteReader();
             Reader.Read();
             SetValues(item);
-
             Reader.Close();
             Connection.Close();
         }
@@ -94,7 +95,10 @@ namespace CollegeBusinessObjects
         public virtual void Filter(string field, string value)
         {
             Connection.Open();
-            Command.CommandText = $"SELECT * FROM {this.Table} WHERE {field} = '{value}'";
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@field", field);
+            command.Parameters.AddWithValue("@value", value);
+            Command.CommandText = $"SELECT * FROM {this.Table} WHERE {@field} = @value";
             Reader = Command.ExecuteReader();
             GenerateList();
         }
@@ -511,6 +515,13 @@ namespace CollegeBusinessObjects
             command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value";
             // Execute the command
             command.ExecuteNonQuery();
+        }
+
+        public void Add(Item item)
+        {
+            connection.Open();
+
+            //command.CommandText
         }
     }
 }
