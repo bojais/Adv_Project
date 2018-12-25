@@ -574,6 +574,37 @@ namespace CollegeBusinessObjects
         }
 
 
+        public void Update(Item item)
+        {
+            Connection.Open();
+
+            Type type = item.GetType();
+
+            PropertyInfo[] properties = type.GetProperties();
+
+            foreach (PropertyInfo prop in properties)
+            {
+                if (prop.GetValue(item) != null && prop.Name != IdField)
+                {
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@value", prop.GetValue(item));
+                    command.Parameters.AddWithValue("@id", item.getID());
+                    command.CommandText = $"UPDATE {table} SET {prop.Name} = @value WHERE {IdField} = @id";
+                    
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch(SqlException ex)
+                    {
+                        item.setValid(false);
+                        item.setErrorMessage(ex.Message);
+                    }
+                }
+            }
+            connection.Close();
+        }
+
 
         // A simple delete method that deletes a record in a table using the ID
         public void Delete(Item item)
