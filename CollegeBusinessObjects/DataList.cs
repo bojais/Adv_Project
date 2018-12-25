@@ -391,7 +391,86 @@ namespace CollegeBusinessObjects
             return reader.Read();
         }
 
+        public void Add(Item item)
+        {
+            connection.Open();
 
+            command.CommandText = $"SELECT * FROM {table}";
+            reader = command.ExecuteReader(CommandBehavior.KeyInfo);
+            DataTable schemaTable = reader.GetSchemaTable();
+            reader.Close();
+
+
+            Type type = item.GetType();
+            command.Parameters.Clear();
+            PropertyInfo[] properties = type.GetProperties();
+
+            int count = 0;
+
+            string addString = $"INSERT INTO {table} (";
+
+            foreach(PropertyInfo property in properties)
+            {
+                if(!schemaTable.Rows[count]["IsAutoIncrement"].ToString().Equals("True"))
+                {
+                    addString += property.Name;
+                    count++;
+
+                    if(count < properties.Count())
+                    {
+                        addString += ", ";
+                    }
+                }
+                else
+                {
+                    count++;
+                }
+            }
+
+            addString += ") VALUES (";
+            count = 0;
+
+            int paramCounter = 1;
+            foreach(PropertyInfo property in properties)
+            {
+                if (!schemaTable.Rows[count]["IsAutoIncrement"].ToString().Equals("True"))
+                {
+                    if(property.GetValue(item) != null)
+                    {
+                        command.Parameters.AddWithValue("@" + paramCounter, property.GetValue(item));
+                        addString += "@" + paramCounter;
+                        paramCounter++;
+                    }
+                    else
+                    {
+                        addString += "NULL";
+                    }
+                    count++;
+
+                    if(count < properties.Count())
+                    {
+                        addString += ", ";
+                    }
+                }
+                else
+                {
+                    count++;
+                }
+            }
+
+            addString += ")";
+            command.CommandText = addString;
+
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch(SqlException ex)
+            {
+                item.setValid(false);
+                item.setErrorMessage(ex.Message);
+            }
+        }
 
 
 
@@ -517,11 +596,5 @@ namespace CollegeBusinessObjects
             command.ExecuteNonQuery();
         }
 
-        public void Add(Item item)
-        {
-            connection.Open();
-
-            //command.CommandText
-        }
     }
 }
