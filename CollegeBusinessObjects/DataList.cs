@@ -172,17 +172,29 @@ namespace CollegeBusinessObjects
         /// <returns>the sum</returns>
         public int TotalValue(string column)
         {
+            // Open the connection
+            connection.Open();
+
             // Init the command
-            command.CommandText = $"SELECT sum({column}) FROM {table}";
+            command.CommandText = $"SELECT coalesce(sum({column}), 0) FROM {table}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         /// <summary>
@@ -194,22 +206,35 @@ namespace CollegeBusinessObjects
         /// <returns>the sum</returns>
         public int TotalValue(string sumColumn, string column, string value)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} WHERE {column} = @value";
+            // Note: We use coalesce() here to convert NULL results to 0
+            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} WHERE {column} = @value";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+            
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         /// <summary>
@@ -223,22 +248,34 @@ namespace CollegeBusinessObjects
         /// <returns>the sum</returns>
         public int TotalValue(string sumColumn, string column, string value, string tableTwo, string key)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
+            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         /// <summary>
@@ -253,22 +290,34 @@ namespace CollegeBusinessObjects
         /// <returns>the sum</returns>
         public int TotalValue(string sumColumn, string column, string value, string tableTwo, string tableThree, string keyOne, string keyTwo)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT sum({sumColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
+            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         /// <summary>
@@ -278,17 +327,29 @@ namespace CollegeBusinessObjects
         /// <returns>The average</returns>
         public double AverageValue(string column)
         {
+            // Open the connection
+            connection.Open();
+
             // Init the command
-            command.CommandText = $"SELECT avg({column}) FROM {table}";
+            command.CommandText = $"SELECT coalesce(avg({column}), 0) FROM {table}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (double)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         /// <summary>
@@ -300,22 +361,34 @@ namespace CollegeBusinessObjects
         /// <returns>the sum</returns>
         public double AverageValue(string avgColumn, string column, string value)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT avg({avgColumn}) FROM {table} WHERE {column} = @value";
+            command.CommandText = $"SELECT coalesce(avg({avgColumn}), 0) FROM {table} WHERE {column} = @value";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (double)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         /// <summary>
@@ -329,27 +402,42 @@ namespace CollegeBusinessObjects
         /// <returns>the sum</returns>
         public double AverageValue(string avgColumn, string column, string value, string tableTwo, string tableThree, string keyOne, string keyTwo)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT avg({avgColumn}) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
+            command.CommandText = $"SELECT coalesce(avg({avgColumn}), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Read the next row
-            reader.Read();
+            // Init the total value to 0
+            int totalValue = 0;
 
-            // Get the value from the reader and cast it to an int
-            return (double)reader.GetValue(0);
+            // Read the next row and check if if it has any values
+            if (reader.Read())
+            {
+                // if it does, set it to the totalValue
+                totalValue = reader.GetInt32(0);
+            }
+
+            // Close the connection
+            connection.Close();
+
+            return totalValue;
         }
 
         // TODO: Add comments
         public bool Exists(string columnOne, string valueOne, string columnTwo, string valueTwo, string columnThree, string valueThree)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
@@ -363,13 +451,21 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Get the value from the reader and cast it to an int
-            return reader.Read();
+            // Save the value before closing the connection
+            bool exist = reader.Read();
+
+            // Close the connection
+            connection.Close();
+
+            return exist;
         }
 
         // TODO: Add comments
         public bool Exists(string tableTwo, string columnOne, string valueOne, string columnTwo, string valueTwo, string columnThree, string valueThree, string keyOne)
         {
+            // Open the connection
+            connection.Open();
+
             // Clear all the prevously set parameters
             command.Parameters.Clear();
             // Set the new parameters
@@ -383,8 +479,13 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
-            // Get the value from the reader and cast it to an int
-            return reader.Read();
+            // Save the value before closing the connection
+            bool exist = reader.Read();
+
+            // Close the connection
+            connection.Close();
+
+            return exist;
         }
 
 
@@ -408,6 +509,9 @@ namespace CollegeBusinessObjects
 
             // Execute the command
             command.ExecuteNonQuery();
+
+            // Close the connection
+            connection.Close();
         }
 
 
@@ -431,6 +535,9 @@ namespace CollegeBusinessObjects
 
             // Execute the command
             command.ExecuteNonQuery();
+
+            // Close the connection
+            connection.Close();
         }
 
 
@@ -511,6 +618,9 @@ namespace CollegeBusinessObjects
             command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value";
             // Execute the command
             command.ExecuteNonQuery();
+
+            // Close the connection
+            connection.Close();
         }
     }
 }
