@@ -74,7 +74,6 @@ namespace CollegeBusinessObjects
         public virtual void Populate()
         {
             Connection.Open();
-            Command.Connection = Connection;
             Command.CommandText = $"SELECT * FROM {this.Table}";
             Reader = Command.ExecuteReader();
             GenerateList();
@@ -83,7 +82,6 @@ namespace CollegeBusinessObjects
         public void Populate(Item item)
         {
             Connection.Open();
-            Command.Connection = Connection;
             Command.CommandText = $"SELECT * FROM {this.Table} WHERE {this.IdField} = '{item.getID()}'";
             Reader = Command.ExecuteReader();
             Reader.Read();
@@ -91,6 +89,14 @@ namespace CollegeBusinessObjects
 
             Reader.Close();
             Connection.Close();
+        }
+
+        public virtual void Filter(string field, string value)
+        {
+            Connection.Open();
+            Command.CommandText = $"SELECT * FROM {this.Table} WHERE {field} = '{value}'";
+            Reader = Command.ExecuteReader();
+            GenerateList();
         }
 
         protected virtual void GenerateList()
