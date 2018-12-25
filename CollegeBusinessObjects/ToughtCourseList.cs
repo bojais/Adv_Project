@@ -8,7 +8,7 @@ namespace CollegeBusinessObjects
 {
     public class ToughtCourseList: DataList
     {
-        public ToughtCourseList(): base("ToughtCourse", "ToughtCourseID")
+        public ToughtCourseList(): base("TaughtCourse", "TaughtCourseID")
         {
 
         }
