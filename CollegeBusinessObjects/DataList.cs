@@ -103,6 +103,20 @@ namespace CollegeBusinessObjects
             GenerateList();
         }
 
+        public virtual void Filter(string table2, string field, string value, string key)
+        {
+            Connection.Open();
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@field", field);
+            command.Parameters.AddWithValue("@value", value);
+            command.Parameters.AddWithValue("@key", key);
+            Command.CommandText = $"SELECT * FROM {this.Table} t, {table2} tt WHERE tt.{@field} = @value AND t.{@key} = tt.{@key}";
+            Reader = Command.ExecuteReader();
+            GenerateList();
+        }
+
+        
+
         protected virtual void GenerateList()
         {
 
