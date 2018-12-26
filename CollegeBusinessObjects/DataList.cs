@@ -635,12 +635,16 @@ namespace CollegeBusinessObjects
 
         public void Update(Item item)
         {
+            // Opening the connection
             Connection.Open();
 
+            // Get the type of the received item
             Type type = item.GetType();
 
+            // Get the properties of the item
             PropertyInfo[] properties = type.GetProperties();
 
+            // Loop through the properties of each item
             foreach (PropertyInfo prop in properties)
             {
                 if (prop.GetValue(item) != null && prop.Name != IdField)
