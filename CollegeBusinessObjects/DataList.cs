@@ -501,6 +501,8 @@ namespace CollegeBusinessObjects
             return exist;
         }
 
+
+        
         public void Add(Item item)
         {
             connection.Open();
@@ -644,7 +646,7 @@ namespace CollegeBusinessObjects
 
         public void Delete(string column, string value)
         {
-            // Opening the connection`
+            // Opening the connection
             connection.Open();
 
             // Clear all the previously set parameters
