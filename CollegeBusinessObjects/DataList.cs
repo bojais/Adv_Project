@@ -115,7 +115,14 @@ namespace CollegeBusinessObjects
             GenerateList();
         }
 
-        
+        public virtual void FilterJoin(string table2, string key)
+        {
+            Connection.Open();
+            command.Parameters.Clear();
+            Command.CommandText = $"SELECT DISTINCT t.* FROM {this.Table} t, {table2} tt  WHERE t.{key} = tt.{key}";
+            Reader = Command.ExecuteReader();
+            GenerateList();
+        }
 
         protected virtual void GenerateList()
         {
