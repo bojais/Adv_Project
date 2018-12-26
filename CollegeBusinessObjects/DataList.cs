@@ -123,8 +123,15 @@ namespace CollegeBusinessObjects
             // Execute the command
             reader = command.ExecuteReader();
 
+            // Save the value before closing the connection
+            int maxId = (int)reader.GetValue(0);
+
+            // Close the connection
+            connection.Close();
+            reader.Close();
+
             // Get the value from the reader and cast it to an int
-            return (int)reader.GetValue(0);
+            return maxId;
         }
 
         public void SetDataTableColumns(Item item)
