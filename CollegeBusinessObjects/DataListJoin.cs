@@ -13,7 +13,7 @@ namespace CollegeBusinessObjects
         public DataListJoin(string table, string idField, string idFieldJoin)
             :base(table, idField)
         {
-
+            this.idFieldJoin = idFieldJoin;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace CollegeBusinessObjects
 
         public void setIdJoin(string idJoin)
         {
-
+            this.idJoin = idJoin;
         }
     }
 }

@@ -648,8 +648,8 @@ namespace CollegeBusinessObjects
                 item.setErrorMessage(ex.Message);
             }
 
-            // Close the connection
-            connection.Close();
+    // Close the connection
+    connection.Close();
             reader.Close();
         }
 
