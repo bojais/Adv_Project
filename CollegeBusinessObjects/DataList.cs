@@ -197,6 +197,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -237,6 +238,7 @@ namespace CollegeBusinessObjects
             
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -261,7 +263,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} t, {tableTwo} tt  WHERE se.{column} = @value = t.{key} = tt.{key}";
+            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} t, {tableTwo} tt  WHERE tt.{column} = @value AND t.{key} = tt.{key}";
 
             // Execute the command
             reader = command.ExecuteReader();
@@ -278,6 +280,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -303,7 +306,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
+            command.CommandText = $"SELECT coalesce(sum({sumColumn}), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE ttt.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
@@ -320,6 +323,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -352,6 +356,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -391,6 +396,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -432,6 +438,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return totalValue;
         }
@@ -460,6 +467,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return exist;
         }
@@ -488,6 +496,7 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
+            reader.Close();
 
             return exist;
         }
