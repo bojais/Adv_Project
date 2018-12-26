@@ -764,5 +764,32 @@ namespace CollegeBusinessObjects
             connection.Close();
         }
 
+        public bool Login(string idColumn, string passwordColumn,string id, string password)
+        {
+            // Open the connection
+            connection.Open();
+
+            // Clear all the prevously set parameters
+            command.Parameters.Clear();
+            // Set the new parameters
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@password", password);
+
+            // Init the command
+            command.CommandText = $"SELECT * FROM {table} WHERE {idColumn} = @id AND {passwordColumn} = @password";
+
+            // Execute the command
+            reader = command.ExecuteReader();
+
+            // Set the return value of reader to the found var
+            // to assert wheather the user has been found or not
+            bool found = reader.Read();
+
+            // Close the connection
+            connection.Close();
+            reader.Close();
+
+            return found;
+        }
     }
 }
