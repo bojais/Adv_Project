@@ -345,13 +345,13 @@ namespace CollegeBusinessObjects
             reader = command.ExecuteReader();
 
             // Init the total value to 0
-            int averageValue = 0;
+            double averageValue = 0;
 
             // Read the next row and check if if it has any values
             if (reader.Read())
             {
                 // if it does, set it to the totalValue
-                averageValue = reader.GetInt32(0);
+                averageValue = reader.GetDouble(0);
             }
 
             // Close the connection
@@ -385,13 +385,13 @@ namespace CollegeBusinessObjects
             reader = command.ExecuteReader();
 
             // Init the total value to 0
-            int averageValue = 0;
+            double averageValue = 0;
 
             // Read the next row and check if if it has any values
             if (reader.Read())
             {
                 // if it does, set it to the totalValue
-                averageValue = reader.GetInt32(0);
+                averageValue = reader.GetDouble(0);
             }
 
             // Close the connection
@@ -427,13 +427,13 @@ namespace CollegeBusinessObjects
             reader = command.ExecuteReader();
 
             // Init the total value to 0
-            int averageValue = 0;
+            double averageValue = 0;
 
             // Read the next row and check if if it has any values
             if (reader.Read())
             {
                 // if it does, set it to the totalValue
-                averageValue = reader.GetInt32(0);
+                averageValue = reader.GetDouble(0);
             }
 
             // Close the connection
