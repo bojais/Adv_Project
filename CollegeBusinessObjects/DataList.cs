@@ -421,7 +421,7 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT coalesce(avg(cast({avgColumn} as float)), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
+            command.CommandText = $"SELECT coalesce(avg(cast({avgColumn} as float)), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE ttt.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
