@@ -114,6 +114,9 @@ namespace CollegeBusinessObjects
         /// <returns>The max id</returns>
         public int GetMaxID()
         {
+            // Open the connection
+            connection.Open();
+
             // Init the command
             command.CommandText = $"SELECT max({idField}) FROM {table}";
 
@@ -505,9 +508,15 @@ namespace CollegeBusinessObjects
         
         public void Add(Item item)
         {
+            // Open the connection
             connection.Open();
 
+            // Init the command
             command.CommandText = $"SELECT * FROM {table}";
+
+            //this commandtext is just to store key information into the schematable
+            // This code block is for getting the columns information such as IsAutoIncrement
+            // and store those details into schemaTable
             reader = command.ExecuteReader(CommandBehavior.KeyInfo);
             DataTable schemaTable = reader.GetSchemaTable();
             reader.Close();
