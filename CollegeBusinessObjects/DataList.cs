@@ -339,26 +339,26 @@ namespace CollegeBusinessObjects
             connection.Open();
 
             // Init the command
-            command.CommandText = $"SELECT coalesce(avg({column}), 0) FROM {table}";
+            command.CommandText = $"SELECT coalesce(avg(cast({column} as float)), 0) FROM {table}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
             // Init the total value to 0
-            int totalValue = 0;
+            int averageValue = 0;
 
             // Read the next row and check if if it has any values
             if (reader.Read())
             {
                 // if it does, set it to the totalValue
-                totalValue = reader.GetInt32(0);
+                averageValue = reader.GetInt32(0);
             }
 
             // Close the connection
             connection.Close();
             reader.Close();
 
-            return totalValue;
+            return averageValue;
         }
 
         /// <summary>
@@ -379,26 +379,26 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT coalesce(avg({avgColumn}), 0) FROM {table} WHERE {column} = @value";
+            command.CommandText = $"SELECT coalesce(avg(cast({avgColumn} as float)), 0) FROM {table} WHERE {column} = @value";
 
             // Execute the command
             reader = command.ExecuteReader();
 
             // Init the total value to 0
-            int totalValue = 0;
+            int averageValue = 0;
 
             // Read the next row and check if if it has any values
             if (reader.Read())
             {
                 // if it does, set it to the totalValue
-                totalValue = reader.GetInt32(0);
+                averageValue = reader.GetInt32(0);
             }
 
             // Close the connection
             connection.Close();
             reader.Close();
 
-            return totalValue;
+            return averageValue;
         }
 
         /// <summary>
@@ -421,26 +421,26 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
 
             // Init the command
-            command.CommandText = $"SELECT coalesce(avg({avgColumn}), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
+            command.CommandText = $"SELECT coalesce(avg(cast({avgColumn} as float)), 0) FROM {table} t, {tableTwo} tt, {tableThree} ttt  WHERE t.{column} = @value AND t.{keyOne} = tt.{keyOne} AND tt.{keyTwo} = ttt.{keyTwo}";
 
             // Execute the command
             reader = command.ExecuteReader();
 
             // Init the total value to 0
-            int totalValue = 0;
+            int averageValue = 0;
 
             // Read the next row and check if if it has any values
             if (reader.Read())
             {
                 // if it does, set it to the totalValue
-                totalValue = reader.GetInt32(0);
+                averageValue = reader.GetInt32(0);
             }
 
             // Close the connection
             connection.Close();
             reader.Close();
 
-            return totalValue;
+            return averageValue;
         }
 
         // TODO: Add comments
