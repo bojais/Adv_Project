@@ -532,77 +532,105 @@ namespace CollegeBusinessObjects
             // Open the connection
             connection.Open();
 
-            // Init the command
+            /* this commandtext is just to store key information into the schematable
+               This code block is for getting the columns information such as IsAutoIncrement
+               and store those details into schemaTable */
             command.CommandText = $"SELECT * FROM {table}";
-
-            //this commandtext is just to store key information into the schematable
-            // This code block is for getting the columns information such as IsAutoIncrement
-            // and store those details into schemaTable
             reader = command.ExecuteReader(CommandBehavior.KeyInfo);
             DataTable schemaTable = reader.GetSchemaTable();
             reader.Close();
 
-
+            // Get the type of the received item
             Type type = item.GetType();
+
+            // Clear the command from any othe parameters that were used previously
             command.Parameters.Clear();
+
+            // Get the properties of the item
             PropertyInfo[] properties = type.GetProperties();
 
+            // A counter for the properties in each loop cycle
             int count = 0;
 
+            // A string that contains the command text
             string addString = $"INSERT INTO {table} (";
 
+            // Loop through the properties of each item
             foreach(PropertyInfo property in properties)
             {
+                // If the column is not auto increment, add the column names in the command text
                 if(!schemaTable.Rows[count]["IsAutoIncrement"].ToString().Equals("True"))
                 {
+                    // Add the column names to command text veriable
                     addString += property.Name;
+                    
+                    // Increment the counter to move to the next column name
                     count++;
 
+                    // While the column name is not the last property in the table, add a comma in the command text variable
                     if(count < properties.Count())
                     {
                         addString += ", ";
                     }
                 }
+                // Otherwise ignore the property and move to the next one
                 else
                 {
                     count++;
                 }
             }
 
+            // More building up on the command text variable
             addString += ") VALUES (";
+
+            // Reset the counter, to start adding the values to the command text variable
             count = 0;
 
+            // A counter for replacing the the variable name with a number
             int paramCounter = 1;
-            foreach(PropertyInfo property in properties)
+
+            // Loop through the properties of each item
+            foreach (PropertyInfo property in properties)
             {
+                // If the column is not auto increment, add values in the command text
                 if (!schemaTable.Rows[count]["IsAutoIncrement"].ToString().Equals("True"))
                 {
+                    // If the properties are not empty, add their values to the command text variable
                     if(property.GetValue(item) != null)
                     {
+                        // Replace each value with a command parameter using the counter declared previuosly
                         command.Parameters.AddWithValue("@" + paramCounter, property.GetValue(item));
                         addString += "@" + paramCounter;
                         paramCounter++;
                     }
+                    // If no values exist, add 'NULL' to the command text variable
                     else
                     {
                         addString += "NULL";
                     }
+                    // Increment and move to the next property
                     count++;
 
-                    if(count < properties.Count())
+                    // While the value is not the last property in the table, add a comma in the command text variable
+                    if (count < properties.Count())
                     {
                         addString += ", ";
                     }
                 }
+                // Otherwise ignore the property and move to the next one
                 else
                 {
                     count++;
                 }
             }
-
+            
+            // Closing for the command text
             addString += ")";
+
+            // Add the string veriable that was builded during the method to the command.CommandText
             command.CommandText = addString;
 
+            // Exception Handling for executing the command
             try
             {
                 command.ExecuteNonQuery();
@@ -612,17 +640,25 @@ namespace CollegeBusinessObjects
                 item.setValid(false);
                 item.setErrorMessage(ex.Message);
             }
+
+            // Close the connection
+            connection.Close();
+            reader.Close();
         }
 
 
         public void Update(Item item)
         {
+            // Opening the connection
             Connection.Open();
 
+            // Get the type of the received item
             Type type = item.GetType();
 
+            // Get the properties of the item
             PropertyInfo[] properties = type.GetProperties();
 
+            // Loop through the properties of each item
             foreach (PropertyInfo prop in properties)
             {
                 if (prop.GetValue(item) != null && prop.Name != IdField)
@@ -631,7 +667,8 @@ namespace CollegeBusinessObjects
                     command.Parameters.AddWithValue("@value", prop.GetValue(item));
                     command.Parameters.AddWithValue("@id", item.getID());
                     command.CommandText = $"UPDATE {table} SET {prop.Name} = @value WHERE {IdField} = @id";
-                    
+
+                    // Exception Handling for executing the command
                     try
                     {
                         command.ExecuteNonQuery();
