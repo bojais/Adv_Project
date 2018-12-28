@@ -680,7 +680,7 @@ namespace CollegeBusinessObjects
                     {
                         command.ExecuteNonQuery();
                     }
-                    catch(SqlException ex)
+                    catch (SqlException ex)
                     {
                         item.setValid(false);
                         item.setErrorMessage(ex.Message);
