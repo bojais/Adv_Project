@@ -148,8 +148,8 @@ namespace CollegeBusinessObjects
             int maxId = (int)reader.GetValue(0);
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             // Get the value from the reader and cast it to an int
             return maxId;
@@ -227,8 +227,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -266,10 +266,10 @@ namespace CollegeBusinessObjects
                 // if it does, set it to the totalValue
                 totalValue = reader.GetInt32(0);
             }
-            
+
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -310,9 +310,9 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
-
+            connection.Close();
+            
             return totalValue;
         }
 
@@ -353,8 +353,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -386,8 +386,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -426,8 +426,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -468,8 +468,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -737,48 +737,6 @@ namespace CollegeBusinessObjects
             // Close the connection
             connection.Close();
         }
-
-
-
-
-
-
-        // With extra (table3 and table4) parameters and no keys parameter
-        // This can delete a record in Section table with all it's related records in the tables Schedule and SectionStudent
-        //public void Delete(string table2, string table3, string table4, string column, string value)
-        //{
-        //    // Opening the connection
-        //    connection.Open();
-
-        //    // Clear all the previously set parameters
-        //    command.Parameters.Clear();
-
-        //    // Set the new Parameters
-        //    command.Parameters.AddWithValue("@value", value);
-
-        //    // Delete related records from the first grand child table
-        //    command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{column} = t2.{column} AND t2.{column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-
-        //    // Delete related records from the second grand child table
-        //    command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{column} = t2.{column} AND t2.{column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-
-        //    // Delete related records from the child table
-        //    command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{column} = t1.{column} AND t1.{column} = @value";
-
-        //    // Delete some record from the parent table
-        //    command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-        //}
-
-
         
         //
         public void Delete(string table2, string table3, string table4, string key1, string key2, string value, string value2)
