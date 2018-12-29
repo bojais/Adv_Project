@@ -691,6 +691,11 @@ namespace CollegeBusinessObjects
 
 
         // A simple delete method that deletes a record in a table using the ID
+        // $"DELETE FROM {Student} WHERE {StudentID} = 1"
+        // $"DELETE FROM {Instructor} WHERE {InstructorID} = 1"
+        // $"DELETE FROM {TaughtCourse} WHERE {TaughtCourseID} = 1"
+        // $"DELETE FROM {Schedule} WHERE {ScheduleID} = 1"
+        // $"DELETE FROM {SectionStudent} WHERE {SectionStudentID} = 1"
         public void Delete(Item item)
         {
             // Opening the connection
@@ -718,32 +723,36 @@ namespace CollegeBusinessObjects
 
         // *************************************************(I may Delete this method)****************************************
 
-        //public void Delete(string column, string value)
-        //{
-        //    // Opening the connection
-        //    connection.Open();
 
-        //    // Clear all the previously set parameters
-        //    command.Parameters.Clear();
+        // This is a Delete method that should be used to delete ((ONLY SectionStudent) before Deleting Student)
+        // $"DELETE FROM {SectionStudent} WHERE {StudentID} = 1"
+        public void Delete(string column, string value)
+        {
+            // Opening the connection
+            connection.Open();
 
-        //    // Set the new Parameters
-        //    command.Parameters.AddWithValue("@value", value);
+            // Clear all the previously set parameters
+            command.Parameters.Clear();
 
-        //    // Init the command
-        //    command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
+            // Set the new Parameters
+            command.Parameters.AddWithValue("@value", value);
 
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
+            // Init the command
+            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
 
-        //    // Close the connection
-        //    connection.Close();
-        //}*******************************************************************************************************************
-        
+            // Execute the command
+            command.ExecuteNonQuery();
+
+            // Close the connection
+            connection.Close();
+        }
+        // *******************************************************************************************************************
+
 
 
 
         //
-        public void Delete(string table2, string table3, string table4, string key1, string key2, string value1, string value2)
+        public void Delete(string table2, string table3, string key1, string key2, string value1, string value2)
         {
             // Opening the connection
             connection.Open();
@@ -758,13 +767,13 @@ namespace CollegeBusinessObjects
             
             
             // Delete related records from the first grand child table
-            command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{key2} = t2.{key2} AND t2.{key2} = @value2";
+            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table} AS t on t3.{key2} = t.{key2} AND t.{key2} = @value2";
             // Execute the command
             command.ExecuteNonQuery();
 
 
             // Delete related records from the second grand child table
-            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{key2} = t2.{key2} AND t2.{key2} = @value2";
+            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t on t2.{key2} = t.{key2} AND t.{key2} = @value2";
             // Execute the command
             command.ExecuteNonQuery();
 
@@ -775,14 +784,57 @@ namespace CollegeBusinessObjects
             command.ExecuteNonQuery();
 
 
-            // Delete some record from the parent table
-            command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value1";
-            // Execute the command
+            //// Delete some record from the parent table
+            //command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value1";
+            //// Execute the command
+            //command.ExecuteNonQuery();
+
+            //// Close the connection
+            //connection.Close();
+        }
+
+
+
+
+
+
+
+        // To delete Schedule, SectionStudent, and then delete Section
+
+
+        /* This method deletes a record from Section table, but before that,
+        it deletes the related records in the Schedule and SectionStudent tables
+        using only one column name which is SectionID
+        SectionID is the key of Section table, and can be considered as a normal column in Schedule and SectionStudent*/
+
+
+        // (table2 will be Schedule)
+        // (table3 will be SectionStudent)
+        // (column will be SectionID)
+        // (value will be the value of SectionID)
+        public void Delete(string table2, string table3, string column, string value)
+        {
+            // Opening the connection
+            connection.Open();
+
+            // Clear all the previously set parameters
+            command.Parameters.AddWithValue("@column", column);
+            command.Parameters.AddWithValue("@value", value);
+
+            command.CommandText = $"DELETE FROM {table2} WHERE {@column} = @value";
+
             command.ExecuteNonQuery();
 
-            // Close the connection
-            connection.Close();
+            command.CommandText = $"DELETE FROM {table3} WHERE {@column} = @value";
+
+            command.ExecuteNonQuery();
+
+            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
+
+            command.ExecuteNonQuery();
         }
+
+
 
         public bool Login(string idColumn, string passwordColumn,string id, string password)
         {

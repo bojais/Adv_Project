@@ -56,7 +56,7 @@ namespace CollegeBusinessObjects
         }
 
         /* There will be no need for a Delete method in the DataListJoin Class
-           As there is no Requirement for deleting a record from a table that has a Composite key*/
+           As there is no Requirement for deleting a record from a table that has composite key*/
 
 
     }
