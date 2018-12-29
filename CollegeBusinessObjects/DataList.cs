@@ -497,8 +497,8 @@ namespace CollegeBusinessObjects
             bool exist = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return exist;
         }
@@ -526,8 +526,8 @@ namespace CollegeBusinessObjects
             bool exist = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return exist;
         }
@@ -648,9 +648,8 @@ namespace CollegeBusinessObjects
                 item.setErrorMessage(ex.Message);
             }
 
-    // Close the connection
-    connection.Close();
-            reader.Close();
+            // Close the connection
+            connection.Close();
         }
 
 
@@ -794,7 +793,8 @@ namespace CollegeBusinessObjects
             command.Parameters.AddWithValue("@value", value);
             command.Parameters.AddWithValue("@value2", value2);
 
-
+            
+            
             // Delete related records from the first grand child table
             command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{key2} = t2.{key2} AND t2.{key2} = @value2";
             // Execute the command
@@ -844,8 +844,8 @@ namespace CollegeBusinessObjects
             bool found = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return found;
         }
