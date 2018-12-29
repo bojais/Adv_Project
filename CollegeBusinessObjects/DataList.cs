@@ -716,30 +716,34 @@ namespace CollegeBusinessObjects
 
 
 
+        // *************************************************(I may Delete this method)****************************************
 
-        public void Delete(string column, string value)
-        {
-            // Opening the connection
-            connection.Open();
+        //public void Delete(string column, string value)
+        //{
+        //    // Opening the connection
+        //    connection.Open();
 
-            // Clear all the previously set parameters
-            command.Parameters.Clear();
+        //    // Clear all the previously set parameters
+        //    command.Parameters.Clear();
 
-            // Set the new Parameters
-            command.Parameters.AddWithValue("@value", value);
+        //    // Set the new Parameters
+        //    command.Parameters.AddWithValue("@value", value);
 
-            // Init the command
-            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
+        //    // Init the command
+        //    command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
 
-            // Execute the command
-            command.ExecuteNonQuery();
+        //    // Execute the command
+        //    command.ExecuteNonQuery();
 
-            // Close the connection
-            connection.Close();
-        }
+        //    // Close the connection
+        //    connection.Close();
+        //}*******************************************************************************************************************
         
+
+
+
         //
-        public void Delete(string table2, string table3, string table4, string key1, string key2, string value, string value2)
+        public void Delete(string table2, string table3, string table4, string key1, string key2, string value1, string value2)
         {
             // Opening the connection
             connection.Open();
@@ -748,7 +752,7 @@ namespace CollegeBusinessObjects
             command.Parameters.Clear();
 
             // Set the new Parameters
-            command.Parameters.AddWithValue("@value", value);
+            command.Parameters.AddWithValue("@value1", value1);
             command.Parameters.AddWithValue("@value2", value2);
 
             
@@ -766,13 +770,13 @@ namespace CollegeBusinessObjects
 
 
             // Delete related records from the child table
-            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{key1} = t1.{key1} AND t1.{key1} = @value";
+            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{key1} = t1.{key1} AND t1.{key1} = @value1";
             // Execute the command
             command.ExecuteNonQuery();
 
 
             // Delete some record from the parent table
-            command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value";
+            command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value1";
             // Execute the command
             command.ExecuteNonQuery();
 
