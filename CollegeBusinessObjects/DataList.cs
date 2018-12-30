@@ -103,6 +103,27 @@ namespace CollegeBusinessObjects
             GenerateList();
         }
 
+        public virtual void Filter(string table2, string field, string value, string key)
+        {
+            Connection.Open();
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@field", field);
+            command.Parameters.AddWithValue("@value", value);
+            command.Parameters.AddWithValue("@key", key);
+            Command.CommandText = $"SELECT * FROM {this.Table} t, {table2} tt WHERE tt.{@field} = @value AND t.{@key} = tt.{@key}";
+            Reader = Command.ExecuteReader();
+            GenerateList();
+        }
+
+        public virtual void FilterJoin(string table2, string key)
+        {
+            Connection.Open();
+            command.Parameters.Clear();
+            Command.CommandText = $"SELECT DISTINCT t.* FROM {this.Table} t, {table2} tt  WHERE t.{key} = tt.{key}";
+            Reader = Command.ExecuteReader();
+            GenerateList();
+        }
+
         protected virtual void GenerateList()
         {
 
@@ -127,8 +148,8 @@ namespace CollegeBusinessObjects
             int maxId = (int)reader.GetValue(0);
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             // Get the value from the reader and cast it to an int
             return maxId;
@@ -206,8 +227,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -245,10 +266,10 @@ namespace CollegeBusinessObjects
                 // if it does, set it to the totalValue
                 totalValue = reader.GetInt32(0);
             }
-            
+
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -289,9 +310,9 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
-
+            connection.Close();
+            
             return totalValue;
         }
 
@@ -332,8 +353,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -365,8 +386,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -405,8 +426,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -447,8 +468,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -476,8 +497,8 @@ namespace CollegeBusinessObjects
             bool exist = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return exist;
         }
@@ -505,8 +526,8 @@ namespace CollegeBusinessObjects
             bool exist = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return exist;
         }
@@ -629,7 +650,6 @@ namespace CollegeBusinessObjects
 
             // Close the connection
             connection.Close();
-            reader.Close();
         }
 
 
@@ -659,7 +679,7 @@ namespace CollegeBusinessObjects
                     {
                         command.ExecuteNonQuery();
                     }
-                    catch(SqlException ex)
+                    catch (SqlException ex)
                     {
                         item.setValid(false);
                         item.setErrorMessage(ex.Message);
@@ -671,6 +691,11 @@ namespace CollegeBusinessObjects
 
 
         // A simple delete method that deletes a record in a table using the ID
+        // $"DELETE FROM {Student} WHERE {StudentID} = 1"
+        // $"DELETE FROM {Instructor} WHERE {InstructorID} = 1"
+        // $"DELETE FROM {TaughtCourse} WHERE {TaughtCourseID} = 1"
+        // $"DELETE FROM {Schedule} WHERE {ScheduleID} = 1"
+        // $"DELETE FROM {SectionStudent} WHERE {SectionStudentID} = 1"
         public void Delete(Item item)
         {
             // Opening the connection
@@ -696,7 +721,11 @@ namespace CollegeBusinessObjects
 
 
 
+        // *************************************************(I may Delete this method)****************************************
 
+
+        // This is a Delete method that should be used to delete ((ONLY SectionStudent) before Deleting Student)
+        // $"DELETE FROM {SectionStudent} WHERE {StudentID} = 1"
         public void Delete(string column, string value)
         {
             // Opening the connection
@@ -717,51 +746,13 @@ namespace CollegeBusinessObjects
             // Close the connection
             connection.Close();
         }
+        // *******************************************************************************************************************
 
 
 
 
-
-
-        // With extra (table3 and table4) parameters and no keys parameter
-        // This can delete a record in Section table with all it's related records in the tables Schedule and SectionStudent
-        //public void Delete(string table2, string table3, string table4, string column, string value)
-        //{
-        //    // Opening the connection
-        //    connection.Open();
-
-        //    // Clear all the previously set parameters
-        //    command.Parameters.Clear();
-
-        //    // Set the new Parameters
-        //    command.Parameters.AddWithValue("@value", value);
-
-        //    // Delete related records from the first grand child table
-        //    command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{column} = t2.{column} AND t2.{column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-
-        //    // Delete related records from the second grand child table
-        //    command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{column} = t2.{column} AND t2.{column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-
-        //    // Delete related records from the child table
-        //    command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{column} = t1.{column} AND t1.{column} = @value";
-
-        //    // Delete some record from the parent table
-        //    command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-        //}
-
-
-        
         //
-        public void Delete(string table2, string table3, string table4, string key1, string key2, string value, string value2)
+        public void Delete(string table2, string table3, string key1, string key2, string value1, string value2)
         {
             // Opening the connection
             connection.Open();
@@ -770,36 +761,110 @@ namespace CollegeBusinessObjects
             command.Parameters.Clear();
 
             // Set the new Parameters
-            command.Parameters.AddWithValue("@value", value);
+            command.Parameters.AddWithValue("@value1", value1);
             command.Parameters.AddWithValue("@value2", value2);
 
-
+            
+            
             // Delete related records from the first grand child table
-            command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{key2} = t2.{key2} AND t2.{key2} = @value2";
+            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table} AS t on t3.{key2} = t.{key2} AND t.{key2} = @value2";
             // Execute the command
             command.ExecuteNonQuery();
 
 
             // Delete related records from the second grand child table
-            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{key2} = t2.{key2} AND t2.{key2} = @value2";
+            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t on t2.{key2} = t.{key2} AND t.{key2} = @value2";
             // Execute the command
             command.ExecuteNonQuery();
 
 
             // Delete related records from the child table
-            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{key1} = t1.{key1} AND t1.{key1} = @value";
+            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{key1} = t1.{key1} AND t1.{key1} = @value1";
             // Execute the command
             command.ExecuteNonQuery();
 
 
-            // Delete some record from the parent table
-            command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value";
-            // Execute the command
-            command.ExecuteNonQuery();
+            //// Delete some record from the parent table
+            //command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value1";
+            //// Execute the command
+            //command.ExecuteNonQuery();
 
-            // Close the connection
-            connection.Close();
+            //// Close the connection
+            //connection.Close();
         }
+
+
+
+        public void Delete(string table2, string table3, string field1, string field2, string coloumn, string value, int blabla)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@value", value);
+            try
+            {
+                command.CommandText = $"Delete t3 FROM {table3} t3 INNER JOIN {table2} t2 ON t2.{field2} = t3.{field2} INNER JOIN {table} t1 ON t1.{field1} = t2.{field1} AND t1.{coloumn} = @value";
+                command.ExecuteNonQuery();
+
+                command.CommandText = $"Delete t2 FROM {table2} t2 INNER JOIN {table} t1 ON t1.{field1} = t2.{field1} AND t1.{coloumn} = @value";
+                command.ExecuteNonQuery();
+
+                command.CommandText = "DELETE FROM " + table + " Where " + coloumn + " = @value";
+                command.ExecuteNonQuery();
+
+            }
+            catch (Exception EX)
+            {
+                Console.WriteLine(EX.ToString());
+                throw;
+            }
+            connection.Close();
+
+
+            //DELETE t1, t2, t3 FROM 
+
+        }
+
+
+
+        // To delete Schedule, SectionStudent, and then delete Section
+
+
+        /* This method deletes a record from Section table, but before that,
+        it deletes the related records in the Schedule and SectionStudent tables
+        using only one column name which is SectionID
+        SectionID is the key of Section table, and can be considered as a normal column in Schedule and SectionStudent*/
+
+
+        // (table2 will be Schedule)
+        // (table3 will be SectionStudent)
+        // (column will be SectionID)
+        // (value will be the value of SectionID)
+        public void Delete(string table2, string table3, string column, string value)
+        {
+            // Opening the connection
+            connection.Open();
+
+            // Clear all the previously set parameters
+            command.Parameters.AddWithValue("@column", column);
+            command.Parameters.AddWithValue("@value", value);
+
+            command.CommandText = $"DELETE FROM {table2} WHERE {@column} = @value";
+
+            command.ExecuteNonQuery();
+
+            command.CommandText = $"DELETE FROM {table3} WHERE {@column} = @value";
+
+            command.ExecuteNonQuery();
+
+            command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
+
+            command.ExecuteNonQuery();
+        }
+
+
+
+
+
 
         public bool Login(string idColumn, string passwordColumn,string id, string password)
         {
@@ -823,8 +888,8 @@ namespace CollegeBusinessObjects
             bool found = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return found;
         }
