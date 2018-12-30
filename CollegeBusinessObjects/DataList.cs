@@ -795,7 +795,34 @@ namespace CollegeBusinessObjects
 
 
 
+        public void Delete(string table2, string table3, string field1, string field2, string coloumn, string value, int blabla)
+        {
+            connection.Open();
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@value", value);
+            try
+            {
+                command.CommandText = $"Delete t3 FROM {table3} t3 INNER JOIN {table2} t2 ON t2.{field2} = t3.{field2} INNER JOIN {table} t1 ON t1.{field1} = t2.{field1} AND t1.{coloumn} = @value";
+                command.ExecuteNonQuery();
 
+                command.CommandText = $"Delete t2 FROM {table2} t2 INNER JOIN {table} t1 ON t1.{field1} = t2.{field1} AND t1.{coloumn} = @value";
+                command.ExecuteNonQuery();
+
+                command.CommandText = "DELETE FROM " + table + " Where " + coloumn + " = @value";
+                command.ExecuteNonQuery();
+
+            }
+            catch (Exception EX)
+            {
+                Console.WriteLine(EX.ToString());
+                throw;
+            }
+            connection.Close();
+
+
+            //DELETE t1, t2, t3 FROM 
+
+        }
 
 
 
@@ -833,6 +860,9 @@ namespace CollegeBusinessObjects
 
             command.ExecuteNonQuery();
         }
+
+
+
 
 
 
