@@ -149,8 +149,8 @@ namespace CollegeBusinessObjects
             int maxId = (int)reader.GetValue(0);
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             // Get the value from the reader and cast it to an int
             return maxId;
@@ -228,8 +228,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -267,10 +267,10 @@ namespace CollegeBusinessObjects
                 // if it does, set it to the totalValue
                 totalValue = reader.GetInt32(0);
             }
-            
+
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -311,9 +311,9 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
-
+            connection.Close();
+            
             return totalValue;
         }
 
@@ -354,8 +354,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return totalValue;
         }
@@ -387,8 +387,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -427,8 +427,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -469,8 +469,8 @@ namespace CollegeBusinessObjects
             }
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return averageValue;
         }
@@ -498,8 +498,8 @@ namespace CollegeBusinessObjects
             bool exist = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return exist;
         }
@@ -527,8 +527,8 @@ namespace CollegeBusinessObjects
             bool exist = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return exist;
         }
@@ -649,9 +649,8 @@ namespace CollegeBusinessObjects
                 item.setErrorMessage(ex.Message);
             }
 
-    // Close the connection
-    connection.Close();
-            reader.Close();
+            // Close the connection
+            connection.Close();
         }
 
 
@@ -693,6 +692,11 @@ namespace CollegeBusinessObjects
 
 
         // A simple delete method that deletes a record in a table using the ID
+        // $"DELETE FROM {Student} WHERE {StudentID} = 1"
+        // $"DELETE FROM {Instructor} WHERE {InstructorID} = 1"
+        // $"DELETE FROM {TaughtCourse} WHERE {TaughtCourseID} = 1"
+        // $"DELETE FROM {Schedule} WHERE {ScheduleID} = 1"
+        // $"DELETE FROM {SectionStudent} WHERE {SectionStudentID} = 1"
         public void Delete(Item item)
         {
             // Opening the connection
@@ -714,11 +718,8 @@ namespace CollegeBusinessObjects
             connection.Close();
         }
 
-
-
-
-
-
+        // To delete Section after deleting SectionStudent and Schedule
+        // To delete SectionStudent before deleting student
         public void Delete(string column, string value)
         {
             // Opening the connection
@@ -740,89 +741,31 @@ namespace CollegeBusinessObjects
             connection.Close();
         }
 
-
-
-
-
-
-        // With extra (table3 and table4) parameters and no keys parameter
-        // This can delete a record in Section table with all it's related records in the tables Schedule and SectionStudent
-        //public void Delete(string table2, string table3, string table4, string column, string value)
-        //{
-        //    // Opening the connection
-        //    connection.Open();
-
-        //    // Clear all the previously set parameters
-        //    command.Parameters.Clear();
-
-        //    // Set the new Parameters
-        //    command.Parameters.AddWithValue("@value", value);
-
-        //    // Delete related records from the first grand child table
-        //    command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{column} = t2.{column} AND t2.{column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-
-        //    // Delete related records from the second grand child table
-        //    command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{column} = t2.{column} AND t2.{column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-
-        //    // Delete related records from the child table
-        //    command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{column} = t1.{column} AND t1.{column} = @value";
-
-        //    // Delete some record from the parent table
-        //    command.CommandText = $"DELETE FROM {table} WHERE {column} = @value";
-
-        //    // Execute the command
-        //    command.ExecuteNonQuery();
-        //}
-
-
-        
-        //
-        public void Delete(string table2, string table3, string table4, string key1, string key2, string value, string value2)
+        // The correct Delete method to delete from Schedule and SectionStudent
+        // Then will be called twice: for Schedule, and for SectionStudent
+        public void Delete(string table2, string key, string column, string value)
         {
-            // Opening the connection
             connection.Open();
-
-            // Clear all the previously set parameters
             command.Parameters.Clear();
-
-            // Set the new Parameters
             command.Parameters.AddWithValue("@value", value);
-            command.Parameters.AddWithValue("@value2", value2);
-
-
-            // Delete related records from the first grand child table
-            command.CommandText = $"DELETE t4 FROM {table4} AS t4 INNER JOIN {table2} AS t2 on t4.{key2} = t2.{key2} AND t2.{key2} = @value2";
-            // Execute the command
-            command.ExecuteNonQuery();
-
-
-            // Delete related records from the second grand child table
-            command.CommandText = $"DELETE t3 FROM {table3} AS t3 INNER JOIN {table2} AS t2 on t3.{key2} = t2.{key2} AND t2.{key2} = @value2";
-            // Execute the command
-            command.ExecuteNonQuery();
-
-
-            // Delete related records from the child table
-            command.CommandText = $"DELETE t2 FROM {table2} AS t2 INNER JOIN {table} AS t1 on t2.{key1} = t1.{key1} AND t1.{key1} = @value";
-            // Execute the command
-            command.ExecuteNonQuery();
-
-
-            // Delete some record from the parent table
-            command.CommandText = $"DELETE FROM {table} WHERE {key1} = @value";
-            // Execute the command
-            command.ExecuteNonQuery();
-
-            // Close the connection
+            try
+            {
+                command.CommandText = $"Delete {table} FROM {table} INNER JOIN {table2} ON {table}.{key} = {table2}.{key} AND {table2}.{column} = @value";
+                command.ExecuteNonQuery();
+            }
+            catch (Exception EX)
+            {
+                Console.WriteLine(EX.ToString());
+                throw;
+            }
             connection.Close();
         }
 
+
+
+
+
+        
         public bool Login(string idColumn, string passwordColumn,string id, string password)
         {
             // Open the connection
@@ -845,8 +788,8 @@ namespace CollegeBusinessObjects
             bool found = reader.Read();
 
             // Close the connection
-            connection.Close();
             reader.Close();
+            connection.Close();
 
             return found;
         }
