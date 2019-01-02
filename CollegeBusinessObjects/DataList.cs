@@ -145,6 +145,7 @@ namespace CollegeBusinessObjects
             reader = command.ExecuteReader();
 
             // Save the value before closing the connection
+            reader.Read();
             int maxId = (int)reader.GetValue(0);
 
             // Close the connection
