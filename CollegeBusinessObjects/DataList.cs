@@ -533,16 +533,16 @@ namespace CollegeBusinessObjects
             return exist;
         }
 
-
-        
         public void Add(Item item)
         {
             // Open the connection
             connection.Open();
 
-            /* this commandtext is just to store key information into the schematable
-               This code block is for getting the columns information such as IsAutoIncrement
-               and store those details into schemaTable */
+            /** 
+             * this commandtext is just to store key information into the schematable
+             * This code block is for getting the columns information such as IsAutoIncrement
+             * and store those details into schemaTable 
+             **/
             command.CommandText = $"SELECT * FROM {table}";
             reader = command.ExecuteReader(CommandBehavior.KeyInfo);
             DataTable schemaTable = reader.GetSchemaTable();
@@ -638,11 +638,11 @@ namespace CollegeBusinessObjects
             // Add the string veriable that was builded during the method to the command.CommandText
             command.CommandText = addString;
 
-            // Exception Handling for executing the command
             try
             {
                 command.ExecuteNonQuery();
             }
+            // Exception Handling for executing the command
             catch(SqlException ex)
             {
                 item.setValid(false);
@@ -652,7 +652,6 @@ namespace CollegeBusinessObjects
             // Close the connection
             connection.Close();
         }
-
 
         public void Update(Item item)
         {
@@ -675,11 +674,11 @@ namespace CollegeBusinessObjects
                     command.Parameters.AddWithValue("@id", item.getID());
                     command.CommandText = $"UPDATE {table} SET {prop.Name} = @value WHERE {IdField} = @id";
 
-                    // Exception Handling for executing the command
                     try
                     {
                         command.ExecuteNonQuery();
                     }
+                    // Exception Handling for executing the command
                     catch (SqlException ex)
                     {
                         item.setValid(false);
@@ -689,7 +688,6 @@ namespace CollegeBusinessObjects
             }
             connection.Close();
         }
-
 
         // A simple delete method that deletes a record in a table using the ID
         // $"DELETE FROM {Student} WHERE {StudentID} = 1"
@@ -711,8 +709,18 @@ namespace CollegeBusinessObjects
             // Init the command
             command.CommandText = $"DELETE FROM {table} WHERE {idField} = @id";
 
-            // Execute the command
-            command.ExecuteNonQuery();
+            try
+            {
+                // Execute the command
+                command.ExecuteNonQuery();
+
+            }
+            // Exception Handling for executing the command
+            catch (SqlException ex)
+            {
+                item.setValid(false);
+                item.setErrorMessage(ex.Message.ToString());
+            }
 
             // Close the connection
             connection.Close();
@@ -743,28 +751,25 @@ namespace CollegeBusinessObjects
 
         // The correct Delete method to delete from Schedule and SectionStudent
         // Then will be called twice: for Schedule, and for SectionStudent
-        public void Delete(string table2, string key, string column, string value)
+        public void Delete(string tableTwo, string column, string key, string value)
         {
+            // Open the connection
             connection.Open();
+
+            // Clear all the prevously set parameters
             command.Parameters.Clear();
+            // Set the new parameters
             command.Parameters.AddWithValue("@value", value);
-            try
-            {
-                command.CommandText = $"Delete {table} FROM {table} INNER JOIN {table2} ON {table}.{key} = {table2}.{key} AND {table2}.{column} = @value";
-                command.ExecuteNonQuery();
-            }
-            catch (Exception EX)
-            {
-                Console.WriteLine(EX.ToString());
-                throw;
-            }
+
+            // Init the command
+            command.CommandText = $"Delete {table} FROM {table} INNER JOIN {tableTwo} ON {table}.{key} = {tableTwo}.{key} AND {tableTwo}.{column} = @value";
+
+            // Execute the command
+            command.ExecuteNonQuery();
+
+            // Close the connection
             connection.Close();
         }
-
-
-
-
-
         
         public bool Login(string idColumn, string passwordColumn,string id, string password)
         {
