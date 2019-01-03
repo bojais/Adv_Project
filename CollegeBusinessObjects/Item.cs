@@ -51,5 +51,10 @@ namespace CollegeBusinessObjects
         {
             return errorMessage;
         }
+
+        public override string ToString()
+        {
+            return id;
+        }
     }
 }
